@@ -5,7 +5,7 @@ export function getPlanTags(plan: Plan): string[] {
 
   const contentToSearch = (plan.title + " " + (plan.description || "") + " " + plan.all_content.join(" ")).toLowerCase();
 
-  // 1. 是否包含宽带网络
+
   if (plan.speed !== null || contentToSearch.includes("fibra") || contentToSearch.includes("internet")) {
     tags.push("internet");
   }

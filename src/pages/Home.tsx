@@ -7,6 +7,20 @@ import PlanDetailsModal from "../components/PlanDetailsModal";
 import { usePlans } from "../hooks/usePlans";
 import { getPlanTags } from "../utils/planCategorizer"; 
 import type { Plan } from "../types/Plan";
+import SearchBox from "../components/SearchBox";
+import SortSelector from "../components/SortSelector";
+
+
+const checkIsTopOption = (plan: Plan) => {
+  return (
+    plan.speed !== null && 
+    plan.speed >= 500 && 
+    plan.price_per_mb !== null && 
+    Number(plan.price_per_mb) < 25 
+    //&& Number(plan.platform_count) >= 1
+  );
+};
+
 
 export default function Home() {
   const { plans: fetchedPlans, loading, error } = usePlans();
@@ -19,6 +33,12 @@ export default function Home() {
   const [maxPrice, setMaxPrice] = useState("");
   const [selectedWifiTypes, setSelectedWifiTypes] = useState<string[]>([]);
   const [selectedInstallTypes, setSelectedInstallTypes] = useState<string[]>([]);
+  const [showOnlyTop, setShowOnlyTop] = useState(false);
+  
+  // Nuevos Estados para el Slider de Plataformas
+  const [minPlatforms, setMinPlatforms] = useState("");
+  const [maxPlatforms, setMaxPlatforms] = useState("");
+
   // Estatos de paginas
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
@@ -29,7 +49,7 @@ export default function Home() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, sortBy, selectedProviders, selectedSpeeds, selectedPackTypes, minPrice, maxPrice]);
+  }, [search, sortBy,showOnlyTop, selectedProviders, selectedSpeeds, selectedPackTypes, minPrice, maxPrice]);
 
   // funcion para abrir modal
   const handleViewDetails = (plan: Plan) => {
@@ -37,10 +57,14 @@ export default function Home() {
     setIsModalOpen(true);
   };
 
+  
+
   const filteredPlans = useMemo(() => {
     //let result = [...mockPlans];
     let result = [...fetchedPlans];
-
+    if (showOnlyTop) {
+      result = result.filter(plan => checkIsTopOption(plan));
+    }
     // SEARCH
     if (search) {
       const searchLower = search.toLowerCase();
@@ -71,24 +95,38 @@ export default function Home() {
     // NEW FILTER: Installation Cost (Gratis vs Pago)
     if (selectedInstallTypes.length > 0) {
       result = result.filter(plan => {
-        const isFree = plan.installation_cost === null || plan.installation_cost === 0;
+        const installationCost = plan.installation_cost;
+        const numericCost = installationCost === null || installationCost === undefined
+          ? null
+          : Number(installationCost);
+        const isFree = numericCost === 0;
         const wantsFree = selectedInstallTypes.includes("Gratis");
         const wantsPaid = selectedInstallTypes.includes("Pago");
-        
-        if (wantsFree && wantsPaid) return true; 
+
+        if (wantsFree && wantsPaid) return true;
         if (wantsFree) return isFree;
         if (wantsPaid) return !isFree;
         return true;
       });
     }
 
-    // PRICE RANGE
+    // Filtrado por Rango de Precios
     result = result.filter(plan => {
       const price = Number(plan.price);
       const minMatch = !minPrice || price >= Number(minPrice);
       const maxMatch = !maxPrice || price <= Number(maxPrice);
       return minMatch && maxMatch;
     });
+
+    // Nuevo Filtrado por Rango de Plataformas
+    if (minPlatforms || maxPlatforms) {
+      result = result.filter(plan => {
+        const count = plan.platform_count || 0;
+        const minMatch = !minPlatforms || count >= Number(minPlatforms);
+        const maxMatch = !maxPlatforms || count <= Number(maxPlatforms);
+        return minMatch && maxMatch;
+      });
+    }
 
     // UPDATED SORTING
     switch (sortBy) {
@@ -107,20 +145,21 @@ export default function Home() {
       default: break;
     }
     return result;
-  }, [fetchedPlans, search, sortBy, selectedProviders, selectedSpeeds, selectedPackTypes, minPrice, maxPrice, selectedWifiTypes, selectedInstallTypes]);
+  }, [
+    fetchedPlans, search, sortBy, showOnlyTop, selectedProviders, 
+    selectedSpeeds, selectedPackTypes, minPrice, maxPrice, 
+    selectedWifiTypes, selectedInstallTypes, minPlatforms, maxPlatforms]);
 
   const totalPages = Math.ceil(filteredPlans.length / itemsPerPage);
   const currentPlans = filteredPlans.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <div className="min-h-screen bg-gray-50/50 font-sans text-gray-900 selection:bg-blue-200">
+    <div className="mx-auto bg-gray-50/50 font-sans text-gray-900 selection:bg-blue-200">
       <Header />
 
-      <main className="max-w-full mx-auto px-4 md:px-6 py-8">
-        <div className="flex flex-1 lg:flex-row gap-8 items-start">
+      <main className="flex px-4 md:px-6 lg:px-8 py-6">
+        <div className="flex lg:flex-row gap-6 xl:gap-8 items-start w-full min-w-0">
           <SidebarFilters
-            search={search} setSearch={setSearch}
-            sortBy={sortBy} setSortBy={setSortBy}
             selectedProviders={selectedProviders} setSelectedProviders={setSelectedProviders}
             selectedSpeeds={selectedSpeeds} setSelectedSpeeds={setSelectedSpeeds}
             selectedPackTypes={selectedPackTypes} setSelectedPackTypes={setSelectedPackTypes}
@@ -128,15 +167,28 @@ export default function Home() {
             maxPrice={maxPrice} setMaxPrice={setMaxPrice}
             selectedWifiTypes={selectedWifiTypes} setSelectedWifiTypes={setSelectedWifiTypes}
             selectedInstallTypes={selectedInstallTypes} setSelectedInstallTypes={setSelectedInstallTypes}
+            showOnlyTop={showOnlyTop} setShowOnlyTop={setShowOnlyTop}
+            minPlatforms={minPlatforms} setMinPlatforms={setMinPlatforms}
+            maxPlatforms={maxPlatforms} setMaxPlatforms={setMaxPlatforms}
           />
 
-          <section className="flex-1 w-full">
-            <div className="flex justify-between items-end mb-6">
-              <div>
+          <section className="flex-1 min-w-0">
+         
+            <div className="flex flex-col xl:flex-row xl:flex-wrap justify-between items-start xl:items-end gap-6 mb-6">
+              <div className="shrink-0">
                 <h2 className="text-2xl font-bold tracking-tight">Planes Disponibles</h2>
                 <p className="text-gray-500 mt-1">
                   {loading ? "Buscando planes..." : `Encontramos ${filteredPlans.length} resultados para ti.`}
                 </p>
+              </div>
+
+              <div className="flex flex-col md:flex-row items-center gap-4 w-full xl:w-auto">
+                <div className="w-full md:w-64">
+                  <SearchBox value={search} onChange={setSearch} />
+                </div>
+                <div className="w-full md:w-auto overflow-x-auto">
+                  <SortSelector value={sortBy} onChange={setSortBy} />
+                </div>
               </div>
             </div>
 
@@ -157,6 +209,7 @@ export default function Home() {
                 <p className="text-gray-500">{error}</p>
               </div>
             )
+            
 
             : filteredPlans.length === 0 ? (
               <div className="bg-white rounded-2xl p-16 text-center shadow-sm border border-gray-100 flex flex-col items-center justify-center h-[50vh]">
@@ -172,7 +225,8 @@ export default function Home() {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {currentPlans.map((plan) => (
-                    <PlanCard key={plan.id} plan={plan} onViewDetails={handleViewDetails} />
+                    <PlanCard key={plan.id} plan={plan} onViewDetails={handleViewDetails}
+                    isTopOption={checkIsTopOption(plan)} />
                   ))}
                 </div>
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../services/axios"; 
 import type { Plan, PlansResponse } from "../types/Plan";
-import { mockPlans } from "../data/mockPlans"; // 引入假数据作为后备
+import { mockPlans } from "../data/mockPlans";
 
 export function usePlans() {
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -15,7 +15,7 @@ export function usePlans() {
         setError(null);
         
         const response = await api.get<PlansResponse>("/plans", {
-          timeout: 15000 // 15秒超时
+          timeout: 60000 
         });
         
         if (response.data && response.data.plans) {
@@ -25,6 +25,11 @@ export function usePlans() {
         }
       } catch (err: any) {
         console.error("Error al obtener los planes:", err);
+        setError(
+          err.response?.data?.message ||
+          err.message ||
+          "Unknown error"
+        );
         console.warn("Usando datos de prueba (Mock) debido al error del servidor.");
         setPlans(mockPlans); 
         

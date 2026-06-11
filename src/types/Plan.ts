@@ -6,12 +6,14 @@ export interface Plan {
   price: string;
   price_after: string | null;
   months_discount: number | null;
+  pack_type?: string;
   description: string | null;
   wifi_type: string | null;
-  installation_cost: number | null;
+  installation_cost: string | number | null; 
   installation_text: string | null;
   value_ratio: string | null;
   price_per_mb: string | null;
+  platform_count?: number | null; 
   all_content: string[];
   source_url: string | null;
   scraped_at: string;

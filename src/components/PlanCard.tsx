@@ -16,20 +16,20 @@ const providerLogos: Record<string, string> = {
 interface Props {
   plan: Plan;
   onViewDetails: (plan: Plan) => void;
+  isTopOption: boolean;
 }
 
-export default function PlanCard({ plan, onViewDetails }: Props) {
+export default function PlanCard({ plan, onViewDetails, isTopOption }: Props) {
   const price = Number(plan.price);
-  const isFreeInstall = plan.installation_cost === null || plan.installation_cost === 0;
+  const isFreeInstall = plan.installation_cost === null || Number(plan.installation_cost) === 0;
   const shortDescription = plan.description 
     ? plan.description.split("|").map(item => item.trim()).filter(Boolean)
     : [];
-  const isTopOption = plan.price_per_mb && Number(plan.price_per_mb) < 50;
-
+  
   return (
     <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col h-full">
       
-      <div className="p-6 pb-4 flex justify-between items-start">
+      <div className="p-5 pb-4 flex justify-between items-start">
         <div className="h-10 w-24 flex items-center justify-start">
           {providerLogos[plan.provider] ? (
             <img src={providerLogos[plan.provider]} alt={plan.provider} className="max-h-full max-w-full object-contain" />
@@ -72,15 +72,20 @@ export default function PlanCard({ plan, onViewDetails }: Props) {
           )}
         </div>
 
+        {/* Tags de características destacando las plataformas */}
         <div className="flex flex-wrap gap-2 mb-6">
           {plan.wifi_type && (
             <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-1 rounded">
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" /></svg>
               {plan.wifi_type}
             </span>
           )}
+          {plan.platform_count !== undefined && plan.platform_count !== null && plan.platform_count > 0 && (
+            <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded">
+              {plan.platform_count} Streaming
+            </span>
+          )}
           <span className={`inline-flex items-center text-xs font-semibold px-2 py-1 rounded ${isFreeInstall ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-700"}`}>
-            {isFreeInstall ? "Instalación Gratis" : "Costo de Instalación Aplica"}
+            {isFreeInstall ? "Instalación Gratis" : "Con Costo de Instalación"}
           </span>
         </div>
       </div>
