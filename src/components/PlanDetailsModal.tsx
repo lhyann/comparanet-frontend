@@ -39,7 +39,7 @@ export default function PlanDetailsModal({ isOpen, onClose, plan }: ModalProps) 
              <span className="bg-blue-50 text-blue-700 font-bold text-xs px-3 py-1 rounded-md uppercase tracking-wide">
                {plan.provider}
              </span>
-             <h2 className="text-xl font-bold text-black">{plan.title}</h2>
+             <h2 className="text-xl font-bold text-[#010105] dark:text-black">{plan.title}</h2>
           </div>
           <button 
             onClick={onClose}
