@@ -39,7 +39,7 @@ export default function PlanDetailsModal({ isOpen, onClose, plan }: ModalProps) 
              <span className="bg-blue-50 text-blue-700 font-bold text-xs px-3 py-1 rounded-md uppercase tracking-wide">
                {plan.provider}
              </span>
-             <h2 className="text-xl font-bold text-gray-900">{plan.title}</h2>
+             <h2 className="text-xl font-bold text-black">{plan.title}</h2>
           </div>
           <button 
             onClick={onClose}
@@ -86,7 +86,9 @@ export default function PlanDetailsModal({ isOpen, onClose, plan }: ModalProps) 
              </div>
              <div className="bg-white border border-gray-200 p-4 rounded-xl">
                 <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Tecnología WiFi</p>
-                <p className="font-semibold text-gray-900">{plan.wifi_type || "Estándar"}</p>
+                <p className="font-semibold text-black">
+                  {plan.wifi_type ? plan.wifi_type : (plan.speed !== null ? "Estándar" : "N/A")}
+                </p>
              </div>
              <div className="bg-white border border-gray-200 p-4 rounded-xl col-span-2 md:col-span-1">
                 <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Valor x Mbps</p>

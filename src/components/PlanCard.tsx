@@ -46,7 +46,7 @@ export default function PlanCard({ plan, onViewDetails, isTopOption }: Props) {
       </div>
 
       <div className="px-6 flex-1">
-        <h2 className="text-gray-900 font-semibold mb-4 line-clamp-1" title={plan.title}>{plan.title}</h2>
+        <h2 className="text-black font-semibold mb-4 line-clamp-1" title={plan.title}>{plan.title}</h2>
         
         {plan.speed !== null ? (
           <div className="flex items-baseline gap-1 mb-6">

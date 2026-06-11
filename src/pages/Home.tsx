@@ -174,9 +174,9 @@ export default function Home() {
 
           <section className="flex-1 min-w-0">
          
-            <div className="flex flex-col xl:flex-row xl:flex-wrap justify-between items-start xl:items-end gap-6 mb-6">
+            <div className="flex flex-col xl:flex-row xl:flex-wrap justify-between items-start xl:items-end gap-6 mb-4">
               <div className="shrink-0">
-                <h2 className="text-2xl font-bold tracking-tight">Planes Disponibles</h2>
+                <h2 className="text-2xl font-bold text-black tracking-tight">Planes Disponibles</h2>
                 <p className="text-gray-500 mt-1">
                   {loading ? "Buscando planes..." : `Encontramos ${filteredPlans.length} resultados para ti.`}
                 </p>

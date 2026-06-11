@@ -54,7 +54,7 @@ export default function SidebarFilters(props: SidebarFiltersProps) {
 
   return (
     <aside className="lg:w-72 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 h-fit shrink-0">
-      <h2 className="text-lg font-bold text-gray-900 mb-6">Filtros</h2>
+      <h2 className="text-lg font-bold text-black mb-6">Filtros</h2>
 
       {/* Botón de Ajuste Con Estilo Minimalista Azul */}
       <div className="mb-6">
