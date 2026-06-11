@@ -20,7 +20,11 @@ interface Props {
 
 export default function PlanCard({ plan, onViewDetails }: Props) {
   const price = Number(plan.price);
-  const pricePerMbps = plan.speed !== null ? price / plan.speed : null;
+  const isFreeInstall = plan.installation_cost === null || plan.installation_cost === 0;
+  const shortDescription = plan.description 
+    ? plan.description.split("|").map(item => item.trim()).filter(Boolean)
+    : [];
+  const isTopOption = plan.price_per_mb && Number(plan.price_per_mb) < 50;
 
   return (
     <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col h-full">
@@ -34,7 +38,7 @@ export default function PlanCard({ plan, onViewDetails }: Props) {
           )}
         </div>
 
-        {pricePerMbps !== null && pricePerMbps < 30 && (
+        {isTopOption && (
           <span className="bg-blue-50 text-blue-700 font-bold text-xs px-3 py-1.5 rounded-full">
             Top Opción
           </span>
@@ -44,7 +48,6 @@ export default function PlanCard({ plan, onViewDetails }: Props) {
       <div className="px-6 flex-1">
         <h2 className="text-gray-900 font-semibold mb-4 line-clamp-1" title={plan.title}>{plan.title}</h2>
         
-        {/* Verificar si speed es null */}
         {plan.speed !== null ? (
           <div className="flex items-baseline gap-1 mb-6">
             <span className="text-5xl font-black text-gray-900 tracking-tighter">{plan.speed}</span>
@@ -68,16 +71,28 @@ export default function PlanCard({ plan, onViewDetails }: Props) {
             </div>
           )}
         </div>
+
+        <div className="flex flex-wrap gap-2 mb-6">
+          {plan.wifi_type && (
+            <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-1 rounded">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" /></svg>
+              {plan.wifi_type}
+            </span>
+          )}
+          <span className={`inline-flex items-center text-xs font-semibold px-2 py-1 rounded ${isFreeInstall ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-700"}`}>
+            {isFreeInstall ? "Instalación Gratis" : "Costo de Instalación Aplica"}
+          </span>
+        </div>
       </div>
 
       <div className="bg-gray-50/50 p-6 mt-auto border-t border-gray-100">
         <ul className="space-y-2 mb-6">
-          {plan.all_content.slice(0, 3).map((content, idx) => ( 
+          {shortDescription.slice(0, 3).map((desc, idx) => ( 
             <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
               <svg className="w-5 h-5 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
               </svg>
-              <span className="leading-tight line-clamp-1">{content}</span>
+              <span className="leading-tight line-clamp-2">{desc}</span>
             </li>
           ))}
         </ul>

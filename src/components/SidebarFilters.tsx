@@ -17,12 +17,18 @@ interface SidebarFiltersProps {
   setMinPrice: (value: string) => void;
   maxPrice: string;
   setMaxPrice: (value: string) => void;
+  selectedWifiTypes: string[]; 
+  setSelectedWifiTypes: (types: string[]) => void;
+  selectedInstallTypes: string[]; 
+  setSelectedInstallTypes: (types: string[]) => void;
 }
 
 export default function SidebarFilters(props: SidebarFiltersProps) {
   const providers = ["vtr", "movistar", "entel", "gtd", "wom"];
   const speeds = [300, 600, 800, 940];
   const packTypes = ["internet", "tv", "telefonía", "streaming"];
+  const wifiTypes = [ "WiFi 6","WiFi 7"];
+  const installTypes = ["Gratis", "Pago"];
 
   const toggleArrayItem = (arr: any[], item: any, setFn: (val: any) => void) => {
     if (arr.includes(item)) setFn(arr.filter((i) => i !== item));
@@ -72,8 +78,9 @@ export default function SidebarFilters(props: SidebarFiltersProps) {
 
       {renderCheckboxGroup("Proveedor", providers, props.selectedProviders, props.setSelectedProviders)}
       {renderCheckboxGroup("Velocidad", speeds, props.selectedSpeeds, props.setSelectedSpeeds, "Mbps")}
-      {/* 渲染新的分类过滤器 */}
       {renderCheckboxGroup("Servicios Incluidos", packTypes, props.selectedPackTypes, props.setSelectedPackTypes)}
+      {renderCheckboxGroup("Tecnología WiFi", wifiTypes, props.selectedWifiTypes, props.setSelectedWifiTypes)}
+      {renderCheckboxGroup("Instalación", installTypes, props.selectedInstallTypes, props.setSelectedInstallTypes)}
     </aside>
   );
 }

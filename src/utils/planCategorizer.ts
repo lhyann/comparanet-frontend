@@ -3,7 +3,7 @@ import type { Plan } from "../types/Plan";
 export function getPlanTags(plan: Plan): string[] {
   const tags: string[] = [];
 
-  const contentToSearch = (plan.title + " " + plan.all_content.join(" ")).toLowerCase();
+  const contentToSearch = (plan.title + " " + (plan.description || "") + " " + plan.all_content.join(" ")).toLowerCase();
 
   // 1. 是否包含宽带网络
   if (plan.speed !== null || contentToSearch.includes("fibra") || contentToSearch.includes("internet")) {

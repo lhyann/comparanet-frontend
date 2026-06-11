@@ -1,7 +1,7 @@
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
-      <div className="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
+      <div className="max-w-full mx-auto px-6 h-20 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-2 cursor-pointer">
           <div className="bg-blue-600 p-2 rounded-xl text-white">
