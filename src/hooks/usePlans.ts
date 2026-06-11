@@ -1,3 +1,14 @@
+import { mockPlans } from "../data/mockPlans";
+
+export function usePlans() {
+  return {
+    plans: mockPlans,
+    loading: false,
+  };
+}
+
+
+/** 
 import { useEffect, useState } from "react"
 import { getPlans } from "../api/plansApi"
 import type { Plan } from "../types/Plan"
@@ -23,4 +34,4 @@ export function usePlans() {
   }, [])
 
   return { plans, loading }
-}
+}**/

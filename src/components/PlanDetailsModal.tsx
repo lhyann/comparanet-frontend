@@ -1,0 +1,105 @@
+import { useEffect } from "react";
+import type { Plan } from "../types/Plan";
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  plan: Plan | null;
+}
+
+export default function PlanDetailsModal({ isOpen, onClose, plan }: ModalProps) {
+  // 当弹窗打开时，禁止下层页面滚动
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
+
+  if (!isOpen || !plan) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+      {/* 黑色半透明背景，点击背景也可关闭 */}
+      <div 
+        className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity"
+        onClick={onClose}
+      ></div>
+
+      {/* 弹窗主体 */}
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col animate-in fade-in zoom-in-95 duration-200">
+        
+        {/* 顶部标题与关闭按钮 */}
+        <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center z-10">
+          <div className="flex items-center gap-3">
+             <span className="bg-blue-50 text-blue-700 font-bold text-xs px-3 py-1 rounded-md uppercase tracking-wide">
+               {plan.provider}
+             </span>
+             <h2 className="text-xl font-bold text-gray-900">{plan.title}</h2>
+          </div>
+          <button 
+            onClick={onClose}
+            className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* 内容区域 */}
+        <div className="p-6 md:p-8">
+          {/* 核心信息横幅 */}
+          <div className="flex flex-wrap gap-6 mb-8 bg-gray-50 rounded-xl p-6 border border-gray-100">
+            <div className="flex-1 min-w-[120px]">
+              <p className="text-sm text-gray-500 font-medium mb-1">Precio Mensual</p>
+              <p className="text-3xl font-bold text-blue-600">${Number(plan.price).toLocaleString("es-CL")}</p>
+              {plan.price_after && (
+                <p className="text-sm text-gray-400 mt-1">Luego ${Number(plan.price_after).toLocaleString("es-CL")}</p>
+              )}
+            </div>
+            
+            <div className="w-px bg-gray-200 hidden md:block"></div>
+
+            <div className="flex-1 min-w-[120px]">
+              <p className="text-sm text-gray-500 font-medium mb-1">Velocidad</p>
+              {plan.speed !== null ? (
+                 <p className="text-3xl font-black text-gray-900">{plan.speed} <span className="text-lg font-medium text-gray-500">Mbps</span></p>
+              ) : (
+                 <p className="text-xl font-bold text-gray-600 mt-1">N/A</p>
+              )}
+            </div>
+          </div>
+
+          {/* 所有内容列表 */}
+          <h3 className="text-lg font-bold text-gray-900 mb-4">¿Qué incluye este plan?</h3>
+          <ul className="space-y-4">
+            {plan.all_content.map((content, idx) => (
+              <li key={idx} className="flex items-start gap-3">
+                <div className="mt-0.5 bg-green-100 p-1 rounded-full text-green-600 shrink-0">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span className="text-gray-700 font-medium leading-snug">{content}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* 底部按钮栏 */}
+        <div className="sticky bottom-0 bg-white border-t border-gray-100 p-6 flex justify-end gap-3 z-10">
+          <button onClick={onClose} className="px-5 py-2.5 text-gray-600 font-semibold hover:bg-gray-100 rounded-xl transition-colors">
+            Cerrar
+          </button>
+          <button className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-colors">
+            Contratar Plan
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
