@@ -1,19 +1,21 @@
 import type { Plan } from "../types/Plan";
 import vtrLogo from "../assets/vtr.png";
 import movistarLogo from "../assets/movistar.svg";
-import entelLogo from "../assets/Entel.svg"; 
+import entelLogo from "../assets/Entel.svg";
+import womLogo from "../assets/wom.png";
+import gtdLogo from "../assets/Gtd.png";
 
 const providerLogos: Record<string, string> = {
   vtr: vtrLogo,
   movistar: movistarLogo,
   entel: entelLogo,
-  claro: "/providers/claro.svg", 
-  mundo: "/providers/mundo.svg",
+  gtd: womLogo, 
+  wom: gtdLogo,
 };
 
 interface Props {
   plan: Plan;
-  onViewDetails: (plan: Plan) => void; // 新增 prop
+  onViewDetails: (plan: Plan) => void;
 }
 
 export default function PlanCard({ plan, onViewDetails }: Props) {
@@ -42,7 +44,7 @@ export default function PlanCard({ plan, onViewDetails }: Props) {
       <div className="px-6 flex-1">
         <h2 className="text-gray-900 font-semibold mb-4 line-clamp-1" title={plan.title}>{plan.title}</h2>
         
-        {/* 修复：判断 speed 是否为 null */}
+        {/* Verificar si speed es null */}
         {plan.speed !== null ? (
           <div className="flex items-baseline gap-1 mb-6">
             <span className="text-5xl font-black text-gray-900 tracking-tighter">{plan.speed}</span>
@@ -80,7 +82,7 @@ export default function PlanCard({ plan, onViewDetails }: Props) {
           ))}
         </ul>
         <button 
-          onClick={() => onViewDetails(plan)} // 点击触发弹窗
+          onClick={() => onViewDetails(plan)} 
           className="w-full bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white font-bold py-2.5 rounded-xl transition-colors"
         >
           Ver Detalles

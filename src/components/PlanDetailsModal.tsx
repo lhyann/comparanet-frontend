@@ -8,7 +8,6 @@ interface ModalProps {
 }
 
 export default function PlanDetailsModal({ isOpen, onClose, plan }: ModalProps) {
-  // 当弹窗打开时，禁止下层页面滚动
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -22,16 +21,14 @@ export default function PlanDetailsModal({ isOpen, onClose, plan }: ModalProps) 
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-      {/* 黑色半透明背景，点击背景也可关闭 */}
       <div 
         className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       ></div>
 
-      {/* 弹窗主体 */}
+      {/* cuerpo modal */}
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col animate-in fade-in zoom-in-95 duration-200">
         
-        {/* 顶部标题与关闭按钮 */}
         <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center z-10">
           <div className="flex items-center gap-3">
              <span className="bg-blue-50 text-blue-700 font-bold text-xs px-3 py-1 rounded-md uppercase tracking-wide">
@@ -49,9 +46,7 @@ export default function PlanDetailsModal({ isOpen, onClose, plan }: ModalProps) 
           </button>
         </div>
 
-        {/* 内容区域 */}
         <div className="p-6 md:p-8">
-          {/* 核心信息横幅 */}
           <div className="flex flex-wrap gap-6 mb-8 bg-gray-50 rounded-xl p-6 border border-gray-100">
             <div className="flex-1 min-w-[120px]">
               <p className="text-sm text-gray-500 font-medium mb-1">Precio Mensual</p>
@@ -73,7 +68,7 @@ export default function PlanDetailsModal({ isOpen, onClose, plan }: ModalProps) 
             </div>
           </div>
 
-          {/* 所有内容列表 */}
+          {/* allcontents */}
           <h3 className="text-lg font-bold text-gray-900 mb-4">¿Qué incluye este plan?</h3>
           <ul className="space-y-4">
             {plan.all_content.map((content, idx) => (
@@ -89,7 +84,7 @@ export default function PlanDetailsModal({ isOpen, onClose, plan }: ModalProps) 
           </ul>
         </div>
 
-        {/* 底部按钮栏 */}
+        {/* button*/}
         <div className="sticky bottom-0 bg-white border-t border-gray-100 p-6 flex justify-end gap-3 z-10">
           <button onClick={onClose} className="px-5 py-2.5 text-gray-600 font-semibold hover:bg-gray-100 rounded-xl transition-colors">
             Cerrar

@@ -20,7 +20,7 @@ interface SidebarFiltersProps {
 }
 
 export default function SidebarFilters(props: SidebarFiltersProps) {
-  const providers = ["vtr", "movistar", "entel", "claro", "mundo"];
+  const providers = ["vtr", "movistar", "entel", "gtd", "wom"];
   const speeds = [300, 600, 800, 940];
   const packTypes = ["internet", "tv", "telefonía", "streaming"];
 

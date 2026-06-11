@@ -20,21 +20,25 @@ export default function Header() {
             Compara<span className="text-blue-600">Net</span>
           </span>
         </div>
-
-        {/* Link */}
+        
+        {/* 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
           <a href="#" className="hover:text-blue-600 transition">Inicio</a>
           <a href="#" className="hover:text-blue-600 transition">Proveedores</a>
           <a href="#" className="hover:text-blue-600 transition">Acerca de</a>
           <a href="#" className="hover:text-blue-600 transition">FAQ</a>
-        </nav>
+        </nav> 
+        */}
 
-        {/* button */}
+        {/* 
         <div>
           <button className="bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
             Contacto
           </button>
         </div>
+         */}
+
+
       </div>
     </header>
   );
