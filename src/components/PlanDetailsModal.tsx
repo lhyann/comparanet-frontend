@@ -19,7 +19,9 @@ export default function PlanDetailsModal({ isOpen, onClose, plan }: ModalProps) 
 
   if (!isOpen || !plan) return null;
 
-  const isFreeInstall = plan.installation_cost === null || plan.installation_cost === 0;
+  const costNumber = plan.installation_cost !== null ? Number(plan.installation_cost) : 0;
+  const isFreeInstall = costNumber === 0;
+
   const shortDescription = plan.description 
     ? plan.description.split("|").map(item => item.trim()).filter(Boolean)
     : [];
@@ -80,8 +82,8 @@ export default function PlanDetailsModal({ isOpen, onClose, plan }: ModalProps) 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
              <div className="bg-white border border-gray-200 p-4 rounded-xl">
                 <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Instalación</p>
-                <p className={`font-semibold ${isFreeInstall ? 'text-green-600' : 'text-gray-900'}`}>
-                  {plan.installation_text || (isFreeInstall ? "Gratis" : `$${plan.installation_cost}`)}
+                <p className={`font-semibold ${isFreeInstall ? 'text-green-600' : 'text-black'}`}>
+                  {isFreeInstall ? `$${costNumber.toLocaleString("es-CL")}` : `$${costNumber.toLocaleString("es-CL")}`}
                 </p>
              </div>
              <div className="bg-white border border-gray-200 p-4 rounded-xl">
